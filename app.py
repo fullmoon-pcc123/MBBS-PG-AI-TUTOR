@@ -189,6 +189,6 @@ if "answer" in st.session_state:
 
         search_url = f"https://www.google.com/search?tbm=isch&q={search_query}"
 
-        st.markdown(f"[Click here to view diagrams]({search_url})")
+        st.markdown(f'<a href="{search_url}" target="_blank">Open Diagram</a>', unsafe_allow_html=True)
 
 st.markdown("Powered by AnecdoteBox.com — Stories to make your Day!")

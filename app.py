@@ -173,6 +173,7 @@ Include a short memory tip if possible.
         answer = response.choices[0].message.content
 
         st.session_state.answer = answer
+        st.session_state.question = user_question
 
 
 # Step 4 — Display answer
@@ -184,7 +185,7 @@ if "answer" in st.session_state:
 if "answer" in st.session_state:
     if st.button("🔬 View Visual Representation"):
 
-        search_query = user_question + " medical diagram"
+        search_query =  st.session_state.question + " medical diagram"
 
         search_url = f"https://www.google.com/search?tbm=isch&q={search_query}"
 

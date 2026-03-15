@@ -120,48 +120,74 @@ st.divider()
 # Ask medical doubt
 st.subheader("💬 Ask Your Medical Doubt")
 
-user_question = st.text_input("Type your question")
+user_question = st.text_input("Type your medical question")
 
 if st.button("Ask AI Tutor"):
 
-    response = client.chat.completions.create(
+    # Step 1 — Classify if question is medical
+    classification = client.chat.completions.create(
         model="gpt-4o-mini",
+        max_tokens=1,
+        temperature=0,
         messages=[
             {
                 "role": "system",
-                "content": """
-You are an AI tutor helping MBBS students prepare for PG entrance exams.
-
-Only answer medical or MBBS related questions.
-If the question is unrelated, politely say you only answer medical questions.
-
-Explain clearly and concisely for exam preparation.
-Include a short memory tip if possible.
-"""
+                "content": "Answer YES if the question is related to medicine, MBBS subjects, diseases, drugs, anatomy, physiology, pathology, surgery, or clinical topics. Otherwise answer NO."
             },
-            {"role": "user", "content": user_question}
+            {
+                "role": "user",
+                "content": user_question
+            }
         ]
     )
 
-    answer = response.choices[0].message.content
+    decision = classification.choices[0].message.content.strip().upper()
 
-    st.write(answer)
+    # Step 2 — Block unrelated questions
+    if decision != "YES":
+        st.warning("I am designed only for MBBS and medical entrance preparation. Please ask a medical question.")
 
-    # Visual button
-    if st.button("🔬 View Diagram"):
+    else:
 
-        if "heart" in user_question.lower():
-            st.image("images/heart.png", use_container_width=True)
+        # Step 3 — Generate tutor answer
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": """
+You are an AI tutor helping MBBS students prepare for PG entrance exams.
 
-        elif "kidney" in user_question.lower():
-            st.image("images/kidney.png", use_container_width=True)
+Explain clearly and concisely.
+Focus on exam-relevant concepts.
+Include a short memory tip if possible.
+"""
+                },
+                {
+                    "role": "user",
+                    "content": user_question
+                }
+            ]
+        )
 
-        elif "brain" in user_question.lower():
-            st.image("images/brain.png", use_container_width=True)
+        answer = response.choices[0].message.content
 
-        else:
-            st.info("Visual diagram not available for this topic yet.")
+        st.session_state.answer = answer
 
-st.divider()
+
+# Step 4 — Display answer
+if "answer" in st.session_state:
+    st.write(st.session_state.answer)
+
+
+# Step 5 — Visual Representation button
+if "answer" in st.session_state:
+    if st.button("🔬 View Visual Representation"):
+
+        search_query = user_question + " medical diagram"
+
+        search_url = f"https://www.google.com/search?tbm=isch&q={search_query}"
+
+        st.markdown(f"[Click here to view diagrams]({search_url})")
 
 st.markdown("Powered by AnecdoteBox.com — Stories to make your Day!")

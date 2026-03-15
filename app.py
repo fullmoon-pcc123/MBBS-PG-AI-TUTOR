@@ -183,7 +183,7 @@ if "answer" in st.session_state:
 
 # Step 5 – Visual Representation buttons
 
-if "answer" in st.session_state:
+if "answer" in st.session_state and "question" in st.session_state:
 
     col1, col2 = st.columns(2)
 

@@ -185,9 +185,9 @@ if "answer" in st.session_state:
 if "answer" in st.session_state:
     if st.button("🔬 View Visual Representation"):
 
-        search_query =  st.session_state.question + " medical diagram"
+        search_query =  st.session_state.question 
 
-        search_url = f"https://www.google.com/search?tbm=isch&q={search_query}"
+        search_url = f"https://teachmeanatomy.info/?s={search_query}"
 
         st.markdown(f'<a href="{search_url}" target="_blank">Open Diagram</a>', unsafe_allow_html=True)
 

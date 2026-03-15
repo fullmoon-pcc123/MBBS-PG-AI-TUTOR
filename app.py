@@ -143,4 +143,4 @@ if st.button("Ask AI Tutor"):
 st.divider()
 
 # Footer
-st.caption("Powered by AnecdoteBox.com — Stories to make your Day!")
+st.markdown("**Powered by AnecdoteBox.com — Stories to make your Day!**")

@@ -191,4 +191,15 @@ if "answer" in st.session_state:
 
         st.markdown(f'<a href="{search_url}" target="_blank">Open Diagram</a>', unsafe_allow_html=True)
 
+    with col2:
+        if st.button("🎥 Watch Video"):
+            video_query = st.session_state.question + " osmosis medical animation"
+            video_url = f"https://www.youtube.com/results?search_query={video_query}"
+
+            st.markdown(
+                f'<a href="{video_url}" target="_blank">Watch Explanation Video</a>',
+                unsafe_allow_html=True
+            )
+
+
 st.markdown("Powered by AnecdoteBox.com — Stories to make your Day!")

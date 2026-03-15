@@ -181,15 +181,21 @@ if "answer" in st.session_state:
     st.write(st.session_state.answer)
 
 
-# Step 5 — Visual Representation button
+# Step 5 – Visual Representation buttons
+
 if "answer" in st.session_state:
-    if st.button("🔬 View Visual Representation"):
 
-        search_query =  st.session_state.question 
+    col1, col2 = st.columns(2)
 
-        search_url = f"https://teachmeanatomy.info/?s={search_query}"
+    with col1:
+        if st.button("🔬 View Diagram"):
+            search_query = st.session_state.question
+            search_url = f"https://teachmeanatomy.info/?s={search_query}"
 
-        st.markdown(f'<a href="{search_url}" target="_blank">Open Diagram</a>', unsafe_allow_html=True)
+            st.markdown(
+                f'<a href="{search_url}" target="_blank">Open Medical Diagram</a>',
+                unsafe_allow_html=True
+            )
 
     with col2:
         if st.button("🎥 Watch Video"):
@@ -201,5 +207,43 @@ if "answer" in st.session_state:
                 unsafe_allow_html=True
             )
 
+st.divider()
+
+st.subheader("🧠 Generate 5 MCQs from Topic")
+
+topic = st.text_input("Enter topic (e.g., Nephron, Cardiac Cycle, Shock)")
+
+if st.button("Generate 5 MCQs"):
+
+    prompt = f"""
+Generate 5 NEET-PG style MCQs from the topic: {topic}
+
+For each question include:
+
+Question
+A
+B
+C
+D
+
+Correct Answer
+Explanation
+"""
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": "You generate high-quality MCQs for MBBS PG entrance exams."
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
+    )
+
+    st.write(response.choices[0].message.content)
 
 st.markdown("Powered by AnecdoteBox.com — Stories to make your Day!")

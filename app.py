@@ -129,18 +129,39 @@ if st.button("Ask AI Tutor"):
         messages=[
             {
                 "role": "system",
-                "content": "You are a helpful medical tutor explaining concepts for MBBS PG entrance exams."
+                "content": """
+You are an AI tutor helping MBBS students prepare for PG entrance exams.
+
+Only answer medical or MBBS related questions.
+If the question is unrelated, politely say you only answer medical questions.
+
+Explain clearly and concisely for exam preparation.
+Include a short memory tip if possible.
+"""
             },
-            {
-                "role": "user",
-                "content": user_question
-            }
+            {"role": "user", "content": user_question}
         ]
     )
 
-    st.write(response.choices[0].message.content)
+    answer = response.choices[0].message.content
+
+    st.write(answer)
+
+    # Visual button
+    if st.button("🔬 View Diagram"):
+
+        if "heart" in user_question.lower():
+            st.image("images/heart.png", use_container_width=True)
+
+        elif "kidney" in user_question.lower():
+            st.image("images/kidney.png", use_container_width=True)
+
+        elif "brain" in user_question.lower():
+            st.image("images/brain.png", use_container_width=True)
+
+        else:
+            st.info("Visual diagram not available for this topic yet.")
 
 st.divider()
 
-# Footer
-st.markdown("**Powered by AnecdoteBox.com — Stories to make your Day!**")
+st.markdown("Powered by AnecdoteBox.com — Stories to make your Day!")
